@@ -36,9 +36,15 @@ namespace PicasaDownloader
                 for (int i = 0; i < nodes.Count; i++)
                 {
                     var url = nodes.Item(i).Attributes["url"].InnerText;
+
+                    // Building "custom" Url to get the image in the highest resolution, it's possible that you need to adjust the value for your needs
+                    int pos = url.LastIndexOf('/');
+                    url = url.Insert(pos, "/s2000");
+
                     var uri = new Uri(url);
+
                     Console.WriteLine("Downloading [{0}/{1}]...", i+1, nodes.Count);
-                    var data = webClient.DownloadData (uri);
+                    var data = webClient.DownloadData(url);
                     var targetPath = Path.Combine(filePath, uri.Segments[uri.Segments.Count() -1 ]);
                     File.WriteAllBytes(targetPath, data);
                 }
